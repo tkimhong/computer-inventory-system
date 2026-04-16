@@ -1,0 +1,32 @@
+{
+  "name": "computer-inventory-system",
+  "version": "0.0.1",
+  "description": "Hi Professor,  I wanted to bring something to your attention regarding our INF 653 final project, due May 1.  I've raised the topic of starting with my group members several times over the past few weeks, but we haven't made any concrete progress — we don't even have a repository set up yet. I'm concerned that at this point (April 13), 18 days out,",
+  "homepage": "https://github.com/tkimhong/computer-inventory-system#readme",
+  "bugs": {
+    "url": "https://github.com/tkimhong/computer-inventory-system/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tkimhong/computer-inventory-system.git"
+  },
+  "license": "MIT",
+  "author": "Tiangkimhong Hoeu",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-handlebars": "^9.0.1",
+    "express-rate-limit": "^8.3.2",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.4.1",
+    "morgan": "^1.10.1",
+    "multer": "^2.1.1"
+  }
+}
