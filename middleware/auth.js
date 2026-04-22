@@ -21,3 +21,5 @@ const auth = (request, response, next) => {
     response.status(401).json({ error: "Invalid token" });
   }
 };
+
+module.exports = auth;
