@@ -2,23 +2,23 @@ const router = require("express").Router();
 const crypto = require("crypto");
 const ApiKey = require("../models/ApiKey");
 const auth = require("../middleware/auth");
-const admin = require("../middleware/rbac");
+const rbac = require('../middleware/rbac')
 
 
 // POST /api/keys to generate API Key 
-router.post("/", async (req, res) => {
+router.post("/", auth, rbac('Admin'), async (req, res) => {
   try{
     const {label} = req.body;
     const rawKey = "sk_" + crypto.randomBytes(24).toString("hex");
     const hashedKey = crypto.createHash("sha256").update(rawKey).digest("hex");
     const keyPrefix = rawKey.substring(0, 10);
-    
+    // console.log(req.user)
     await ApiKey.create({
       label,
       hashedKey,
       keyPrefix,
-      isActive: true, //replace with req.user.isActive
-      createdBy: "507f1f77bcf86cd799439011" //req.user._id
+      isActive: req.user.isActive, 
+      createdBy: req.user.id
     });
 
     res.status(201).json({message: "API Key Created, PLEASE COPY THIS, IT SHOWS ONLY ONCE HERE!", rawKey});
@@ -27,17 +27,8 @@ router.post("/", async (req, res) => {
   }
 
 });
-// get the label from the body
-// generate rawKey = "sk_" + using cryto.randomBytes().toString(hex)
-// keyhash for strong in db using cryptotocreatehash(sha256).inputrawkey.diegest(hex)
-// keyprefix = with the first 10 of rawkey
-// create createdby: use user._id
-// show the rawkey 201
 
-
-// find all isActive: true keys, store in keys
-// .populate("createdBy", "name email").lean
-router.get("/", async (req, res) => {
+router.get("/", auth, rbac('Admin'), async (req, res) => {
   const keys = await ApiKey.find ({isActive: true})
   .select("-hashedKey")
   // .populate("createdBy", "name, email")
@@ -46,7 +37,7 @@ router.get("/", async (req, res) => {
   res.json(keys)
 })
 
-router.patch("/:id", async (req, res) => {
+router.delete("/:id", auth, rbac('Admin'), async (req, res) => {
   const key = await ApiKey.findByIdAndUpdate(req.params.id, {isActive: false}, {new: true});
 
   if(!key){

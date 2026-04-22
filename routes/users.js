@@ -1,11 +1,12 @@
+const router = require("express").Router();
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const ApiKey = require('../models/ApiKey');
-
-const router = require("express").Router();
+const auth = require('../middleware/auth')
+const rbac = require('../middleware/rbac')
 
 // POST /api/users
-router.post("/", async (req, res) => {
+router.post("/", auth, rbac('Admin'), async (req, res) => {
   // response.json({ message: "អាឆ្កែវត្ថ" });
   const {username, password, role, isActive} = req.body;
 
@@ -21,29 +22,7 @@ router.post("/", async (req, res) => {
 });
 
 
-
-// create obj 
-
-// try 
-
-// {hashed bcrypt.hash (what, 10)
-
-// create user}
-
-// status(201).json({mess})
-
-// catch (err){}
-
-
-
-// patch /:id/role 
-// take the role from body
-// check the role if its valid, else 400 json error
-// const user = findByIdAndUpdate (the id from param, {what to updare}, {new: true})
-// res.json
-
-
-router.patch("/:id/role", async (req, res) => {
+router.patch("/:id/role", auth, rbac('Admin'), async (req, res) => {
   const {role} = req.body;
 
   if (!["Admin", "Technician"].includes(role)){
@@ -59,10 +38,12 @@ router.patch("/:id/role", async (req, res) => {
 
 })
 
-router.patch("/:id/status", async (req, res) => {
+router.patch("/:id/status", auth, rbac('Admin'), async (req, res) => {
   const {isActive} = req.body;
   const user = await User.findByIdAndUpdate(req.params.id, {isActive}, {new: true});
-
+  if(!user){
+    return res.status(404).json({error: "user not found"})
+  }
   if(!isActive){
     await ApiKey.updateMany(
       {createdBy: user._id}, {isActive: false}
