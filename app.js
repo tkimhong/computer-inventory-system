@@ -15,6 +15,7 @@ const itemRoutes = require("./routes/items");
 const transactionRoutes = require("./routes/transactions");
 const keyRoutes = require("./routes/keys");
 const inventoryRoutes = require("./routes/inventory");
+const authUiRoutes = require("./routes/auth_ui");
 
 const app = express();
 
@@ -42,6 +43,8 @@ app.use("/api/items", itemRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/keys", keyRoutes);
 app.use("/items", inventoryRoutes);
+app.use("/login", authUiRoutes);
+app.use("/logout", authUiRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () =>
