@@ -1,0 +1,89 @@
+<h2>Computer Inventory Management</h2>
+
+<div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #dee2e6;">
+  <h3>Add New Asset</h3>
+  <form action="/api/items" method="POST" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+    
+    <input type="text" name="serialNumber" placeholder="Serial Number (Required)" required style="padding: 10px;">
+    <input type="text" name="brand" placeholder="Brand (e.g., Dell, Apple)" required style="padding: 10px;">
+    <input type="text" name="model" placeholder="Model (e.g., XPS 15, MacBook Pro)" required style="padding: 10px;">
+    
+    <select name="category" required style="padding: 10px;">
+      <option value="" disabled selected>Select Classification...</option>
+      <optgroup label="Computers">
+        <option value="Laptop">Laptop</option>
+        <option value="Desktop">Desktop</option>
+        <option value="Server">Server</option>
+      </optgroup>
+      <optgroup label="Peripherals">
+        <option value="Monitor">Monitor</option>
+        <option value="Keyboard">Keyboard</option>
+        <option value="Mouse">Mouse</option>
+      </optgroup>
+    </select>
+
+    <select name="status" style="padding: 10px;">
+      <option value="Available">Available</option>
+      <option value="In-Use">In-Use</option>
+      <option value="Maintenance">Maintenance</option>
+      <option value="Retired">Retired</option>
+    </select>
+
+    <input type="date" name="dateAcquired" style="padding: 10px;">
+
+    <button type="submit" class="btn btn-primary" style="grid-column: span 2;">Register Asset</button>
+  </form>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Serial No.</th>
+      <th>Brand & Model</th>
+      <th>Category</th>
+      <th>Status</th>
+      <th>Acquired</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each items}}
+    <tr>
+      <td><strong>{{this.serialNumber}}</strong></td>
+      <td>{{this.brand}} {{this.model}}</td>
+      <td>{{this.category}}</td>
+      <td>
+          <span style="padding: 4px 8px; border-radius: 4px; font-size: 0.9em; background: #e9ecef;">
+              {{this.status}}
+          </span>
+      </td>
+      <td>{{this.dateAcquired}}</td>
+      <td>
+        <button onclick="softDelete('{{this._id}}')" class="btn btn-danger">Remove</button>
+      </td>
+    </tr>
+    {{else}}
+    <tr>
+      <td colspan="6" style="text-align: center; padding: 20px;">No active assets found.</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+<script>
+  async function softDelete(id) {
+    if (!confirm("Are you sure you want to remove this asset? It will be archived according to company policy.")) return;
+
+    try {
+      const response = await fetch(`/api/items/${id}`, { method: 'DELETE' });
+      if (response.ok) {
+        window.location.reload(); 
+      } else {
+        alert("Failed to remove item.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred.");
+    }
+  }
+</script>
