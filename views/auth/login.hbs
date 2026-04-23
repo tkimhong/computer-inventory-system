@@ -1,0 +1,27 @@
+<h2>Login</h2>
+
+{{#if error}}
+  <p style="color: red;">{{error}}</p>
+{{/if}}
+
+<form
+  action="/login"
+  method="POST"
+  style="display: flex; flex-direction: column; gap: 15px; max-width: 400px;"
+>
+  <input
+    type="text"
+    name="username"
+    placeholder="Username"
+    required
+    style="padding: 10px;"
+  />
+  <input
+    type="password"
+    name="password"
+    placeholder="Password"
+    required
+    style="padding: 10px;"
+  />
+  <button type="submit" class="btn btn-primary">Login</button>
+</form>
