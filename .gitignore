@@ -140,3 +140,6 @@ vite.config.ts.timestamp-*
 
 # Uploaded files
 uploads/
+
+# VSCode artifact
+tempCodeRunnerFile.js
