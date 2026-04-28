@@ -45,6 +45,7 @@ app.use("/api/keys", keyRoutes);
 app.use("/items", inventoryRoutes);
 app.use("/login", authUiRoutes);
 app.use("/logout", authUiRoutes);
+app.use("/transactions", transactionRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () =>
