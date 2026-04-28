@@ -13,7 +13,7 @@ exports.createKey = async (req, res) => {
 			hashedKey,
 			keyPrefix,
 			isActive: req.user.isActive,
-			createdBy: req.user.id
+			createdBy: req.user._id
 		});
 
 		res.status(201).json({ message: "API Key Created, PLEASE COPY THIS, IT SHOWS ONLY ONCE HERE!", rawKey });
@@ -24,7 +24,7 @@ exports.createKey = async (req, res) => {
 
 exports.listKeys = async (req, res) => {
 	try {
-		const keys = await ApiKey.find({ isActive: true })
+		const keys = await ApiKey.find({ isActive: true, isDeleted: false })
 			.select("-hashedKey")
 			.populate("createdBy", "username")
 			.lean();
@@ -36,7 +36,7 @@ exports.listKeys = async (req, res) => {
 
 exports.revokeKey = async (req, res) => {
 	try {
-		const key = await ApiKey.findByIdAndUpdate(req.params.id, { isActive: false }, { new: true });
+		const key = await ApiKey.findByIdAndUpdate(req.params.id, { isActive: false, isDeleted: true }, { new: true });
 		if (!key) return res.status(404).json({ error: "Key not found" });
 		res.json({ message: "Key revoked" });
 	} catch (err) {
