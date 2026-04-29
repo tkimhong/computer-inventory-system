@@ -14,6 +14,7 @@ const userRoutes = require("./routes/users");
 const itemRoutes = require("./routes/items");
 const transactionRoutes = require("./routes/transactions");
 const keyRoutes = require("./routes/keys");
+const inventoryRoutes = require("./routes/inventory");
 
 const app = express();
 
@@ -40,6 +41,9 @@ app.use("/api/users", userRoutes);
 app.use("/api/items", itemRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/keys", keyRoutes);
+app.use("/items", inventoryRoutes);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port http://localhost:${PORT}`));
+app.listen(PORT, () =>
+  console.log(`Server running on port http://localhost:${PORT}`),
+);
