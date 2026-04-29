@@ -6,15 +6,15 @@ const Transaction = require("../models/Transaction");
 
 router.get("/", auth, rbac("Admin"), async (req, res) => {
   try {
-    const users = await User.find({ _id: { $ne: "69e9165e01d49d70e52af6bc" } })
+    const users = await User.find()
         .select("-password -__v")
         .lean();
 
     const usersWithAssets = await Promise.all(
       users.map(async (user) => {
         const assetCount = await Transaction.countDocuments({
-          assignedTo: user._id,
-          status: "Checked Out",
+          user: user._id,
+          action: "checkout",
         });
         return { ...user, assetCount };
       })
@@ -36,10 +36,10 @@ router.get("/:id/assets", auth, async (req, res) => {
     if (!user) return res.status(404).render("error", { title: "Not Found", message: "User not found" });
 
     const assets = await Transaction.find({
-      assignedTo: req.params.id,
-      status: "Checked Out",
+      user: req.params.id,
+      action: "checkout",
     })
-      .populate("itemId", "serialNumber model brand category status")
+      .populate("item", "serialNumber model brand category status")
       .lean();
 
     res.render("users/assets", { user, assets, title: `Assets for ${user.username}` });

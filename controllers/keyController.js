@@ -12,7 +12,7 @@ exports.createKey = async (req, res) => {
 			label,
 			hashedKey,
 			keyPrefix,
-			isActive: req.user.isActive,
+			isActive: true,
 			createdBy: req.user._id
 		});
 
