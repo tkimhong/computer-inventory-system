@@ -1,5 +1,5 @@
 <div style="margin-bottom: 20px;">
-  <a href="/inventory" style="text-decoration: none; color: #007bff; font-weight: bold;">&larr; Back to Inventory</a>
+  <a href="/items" style="text-decoration: none; color: #007bff; font-weight: bold;">&larr; Back to Inventory</a>
 </div>
 
 <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; border: 1px solid #e9ecef;">
@@ -28,7 +28,7 @@
     <tbody>
       {{#each history}}
       <tr style="border-bottom: 1px solid #e9ecef;">
-        <td style="padding: 12px; color: #6c757d;">{{this.createdAt}}</td>
+        <td style="padding: 12px; color: #6c757d;">{{formatDate this.createdAt}}</td>
         <td style="padding: 12px;">
             <span style="text-transform: uppercase; font-size: 0.85em; font-weight: bold; letter-spacing: 0.5px;">
                 {{this.action}}

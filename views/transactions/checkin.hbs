@@ -1,0 +1,25 @@
+<h1>Check In Item</h1>
+
+<form
+  action="/api/transactions/checkin"
+  method="POST"
+  enctype="multipart/form-data"
+>
+  <div>
+    <label for="itemId">Item ID</label>
+    <input type="text" id="itemId" name="itemId" required />
+  </div>
+  <div>
+    <label for="userId">User ID</label>
+    <input type="text" id="userId" name="userId" required />
+  </div>
+  <div>
+    <label for="notes">Notes</label>
+    <textarea id="notes" name="notes"></textarea>
+  </div>
+  <div>
+    <label for="document">Reference Document</label>
+    <input type="file" id="document" name="document" />
+  </div>
+  <button type="submit">Check In</button>
+</form>

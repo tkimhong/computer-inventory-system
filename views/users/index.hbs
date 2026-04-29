@@ -1,0 +1,114 @@
+<h2>User Management</h2>
+
+<!-- Create New User -->
+<div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #dee2e6;">
+  <h3>Create New User</h3>
+  <div id="createMsg" style="display:none; margin-bottom:10px; padding:10px; border-radius:4px;"></div>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+    <input type="text" id="username" placeholder="Username (Required)" style="padding: 10px;">
+    <input type="password" id="password" placeholder="Password (Required)" style="padding: 10px;">
+    <select id="role" style="padding: 10px; grid-column: span 2;">
+      <option value="" disabled selected>Select Role...</option>
+      <option value="Admin">Admin</option>
+      <option value="Technician">Technician</option>
+    </select>
+    <button onclick="createUser()" class="btn btn-primary" style="grid-column: span 2; padding: 10px;">Create User</button>
+  </div>
+</div>
+
+<!-- Users List Table -->
+<h3>Users List</h3>
+{{#if users}}
+  <table>
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Assets Assigned</th>
+        <th>Created</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each users}}
+        <tr>
+          <td><strong>{{this.username}}</strong></td>
+          <td>
+            <select onchange="updateField('{{this._id}}', 'role', this.value)" style="padding: 5px;">
+              <option value="Admin" {{#if (eq this.role 'Admin')}}selected{{/if}}>Admin</option>
+              <option value="Technician" {{#if (eq this.role 'Technician')}}selected{{/if}}>Technician</option>
+            </select>
+          </td>
+          <td>
+            <select onchange="updateField('{{this._id}}', 'status', this.value)" style="padding: 5px;">
+              <option value="Enabled"  {{#if this.isActive}}selected{{/if}}>Enabled</option>
+              <option value="Disabled" {{#unless this.isActive}}selected{{/unless}}>Disabled</option>
+            </select>
+          </td>
+          <td style="text-align:center;"><strong style="color:#007bff;">{{this.assetCount}}</strong></td>
+          <td>{{formatDate this.createdAt}}</td>
+          <td>
+            <a href="/users/{{this._id}}/assets" class="btn btn-primary" style="padding:5px 8px; font-size:12px; text-decoration:none; display:inline-block;">View Assets</a>
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+{{else}}
+  <p style="text-align:center; color:#6c757d;">No users found. Create one to get started.</p>
+{{/if}}
+
+<script>
+async function createUser() {
+  const body = {
+    username: document.getElementById('username').value,
+    password: document.getElementById('password').value,
+    role:     document.getElementById('role').value,
+  };
+
+  const msg = document.getElementById('createMsg');
+
+  try {
+    const res = await fetch('/api/users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+      msg.style.cssText = 'display:block; background:#d4edda; color:#155724; border:1px solid #c3e6cb; padding:10px; border-radius:4px;';
+      msg.textContent = `✅ User "${body.username}" created! Refreshing...`;
+      setTimeout(() => location.reload(), 1500);
+    } else {
+      msg.style.cssText = 'display:block; background:#f8d7da; color:#721c24; border:1px solid #f5c6cb; padding:10px; border-radius:4px;';
+      msg.textContent = `❌ ${data.message || data.error || 'Failed to create user'}`;
+    }
+  } catch (err) {
+    msg.style.cssText = 'display:block; background:#f8d7da; color:#721c24; border:1px solid #f5c6cb; padding:10px; border-radius:4px;';
+    msg.textContent = '❌ Network error. Please try again.';
+  }
+}
+
+async function updateField(userId, field, value) {
+  const endpoint = field === 'role'
+    ? `/api/users/${userId}/role`
+    : `/api/users/${userId}/status`;
+
+  const body = field === 'role'
+    ? { role: value }
+    : { isActive: value === 'Enabled' };
+
+  const res = await fetch(endpoint, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+
+  if (!res.ok) {
+    const data = await res.json();
+    alert(`❌ Failed to update ${field}: ${data.error || 'Unknown error'}`);
+  }
+}
+</script>

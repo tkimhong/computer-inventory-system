@@ -16,10 +16,8 @@ exports.getHistory = async (req, res) => {
       return res.status(404).json({ error: "Item not found" });
 
     const Transaction = require("../models/Transaction");
-    
-    // ADDED: .populate("user", "username") to get the actual names
     const history = await Transaction.find({ item: req.params.id })
-      .populate("user", "username") 
+      .populate("user", "username")
       .sort({ createdAt: -1 });
 
     res.json({ item, history });

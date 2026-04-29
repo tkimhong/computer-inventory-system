@@ -15,6 +15,9 @@ const itemRoutes = require("./routes/items");
 const transactionRoutes = require("./routes/transactions");
 const keyRoutes = require("./routes/keys");
 const inventoryRoutes = require("./routes/inventory");
+const authUiRoutes = require("./routes/auth_ui");
+const usersUiRoutes = require("./routes/users_ui");
+const keysUiRoutes = require("./routes/keys_ui");
 
 const app = express();
 
@@ -22,7 +25,14 @@ const app = express();
 connectDB();
 
 // Handlebars
-app.engine("hbs", engine({ defaultLayout: "main", extname: ".hbs" }));
+app.engine("hbs", engine({
+  defaultLayout: "main",
+  extname: ".hbs",
+  helpers: {
+    eq: (a, b) => a === b,
+    formatDate: (date) => date ? new Date(date).toLocaleDateString() : "",
+  }
+}));
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "views"));
 
@@ -34,14 +44,25 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/uploads", express.static("uploads"));
 
 // Routes
+app.get("/", (req, res) => {
+  const token = req.cookies?.jwt;
+  if (token) return res.redirect("/items");
+  res.redirect("/login");
+});
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/items", itemRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/keys", keyRoutes);
 app.use("/items", inventoryRoutes);
+app.use("/login", authUiRoutes);
+app.use("/logout", authUiRoutes);
+app.use("/transactions", transactionRoutes);
+app.use("/users", usersUiRoutes);
+app.use("/keys", keysUiRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () =>
