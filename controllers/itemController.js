@@ -16,9 +16,11 @@ exports.getHistory = async (req, res) => {
       return res.status(404).json({ error: "Item not found" });
 
     const Transaction = require("../models/Transaction");
-    const history = await Transaction.find({ item: req.params.id }).sort({
-      createdAt: -1,
-    });
+    const history = await Transaction.find({ item: req.params.id })
+      .populate("user", "username")
+      .sort({
+        createdAt: -1,
+      });
 
     res.json({ item, history });
   } catch (error) {
@@ -38,11 +40,9 @@ exports.createItem = async (req, res) => {
     });
     res.status(201).json(newItem);
   } catch (error) {
-    res
-      .status(400)
-      .json({
-        error: "Failed to create item. Check for duplicate serial numbers.",
-      });
+    res.status(400).json({
+      error: "Failed to create item. Check for duplicate serial numbers.",
+    });
   }
 };
 

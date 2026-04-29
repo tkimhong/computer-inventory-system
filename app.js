@@ -25,14 +25,17 @@ const app = express();
 connectDB();
 
 // Handlebars
-app.engine("hbs", engine({
-  defaultLayout: "main",
-  extname: ".hbs",
-  helpers: {
-    eq: (a, b) => a === b,
-    formatDate: (date) => date ? new Date(date).toLocaleDateString() : "",
-  }
-}));
+app.engine(
+  "hbs",
+  engine({
+    defaultLayout: "main",
+    extname: ".hbs",
+    helpers: {
+      eq: (a, b) => a === b,
+      formatDate: (date) => (date ? new Date(date).toLocaleDateString() : ""),
+    },
+  }),
+);
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "views"));
 
@@ -44,6 +47,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/uploads", express.static("uploads"));
 
 // Routes
 app.get("/", (req, res) => {
