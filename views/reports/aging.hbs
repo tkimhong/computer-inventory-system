@@ -1,0 +1,71 @@
+<h2>Asset Aging Report</h2>
+
+<div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107; margin-bottom: 20px;">
+  <strong>⚠️ Assets older than 3 years (as of {{threeYearsAgoDate}})</strong>
+  <p style="margin: 10px 0 0 0; color: #856404;">
+    Found <strong>{{count}}</strong> asset(s) that have exceeded the typical 3-year lifecycle and may require replacement or evaluation.
+  </p>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px;">
+  <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border-left: 4px solid #ffc107;">
+    <div style="font-size: 0.9em; color: #6c757d; text-transform: uppercase; letter-spacing: 0.5px;">3-5 Years Old</div>
+    <div style="font-size: 2.5em; font-weight: bold; color: #ffc107; margin-top: 10px;">{{breakdown.threeToFive}}</div>
+  </div>
+
+  <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border-left: 4px solid #ff6b6b;">
+    <div style="font-size: 0.9em; color: #6c757d; text-transform: uppercase; letter-spacing: 0.5px;">5-7 Years Old</div>
+    <div style="font-size: 2.5em; font-weight: bold; color: #ff6b6b; margin-top: 10px;">{{breakdown.fiveToSeven}}</div>
+  </div>
+
+  <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border-left: 4px solid #dc3545;">
+    <div style="font-size: 0.9em; color: #6c757d; text-transform: uppercase; letter-spacing: 0.5px;">7+ Years Old</div>
+    <div style="font-size: 2.5em; font-weight: bold; color: #dc3545; margin-top: 10px;">{{breakdown.sevenPlus}}</div>
+  </div>
+</div>
+
+<div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+  <h3 style="margin-top: 0; color: #343a40;">Detailed Aging Asset List</h3>
+  <table style="width: 100%; border-collapse: collapse;">
+    <thead>
+      <tr style="background: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+        <th style="padding: 12px; text-align: left; color: #ffffff;">Serial No.</th>
+        <th style="padding: 12px; text-align: left; color: #ffffff;">Brand & Model</th>
+        <th style="padding: 12px; text-align: left; color: #ffffff;">Category</th>
+        <th style="padding: 12px; text-align: left; color: #ffffff;">Status</th>
+        <th style="padding: 12px; text-align: left; color: #ffffff;">Acquired</th>
+        <th style="padding: 12px; text-align: center; color: #ffffff;">Age (Years)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each items}}
+      <tr style="border-bottom: 1px solid #e9ecef;">
+        <td style="padding: 12px; font-weight: bold; color: #007bff;">{{this.serialNumber}}</td>
+        <td style="padding: 12px;">{{this.brand}} {{this.model}}</td>
+        <td style="padding: 12px;">{{this.category}}</td>
+        <td style="padding: 12px;">
+          <span style="padding: 4px 8px; border-radius: 4px; font-size: 0.85em; font-weight: bold; 
+            {{#eq this.status 'Available'}}background: #d4edda; color: #155724;{{/eq}}
+            {{#eq this.status 'In-Use'}}background: #fff3cd; color: #856404;{{/eq}}
+            {{#eq this.status 'Maintenance'}}background: #f8d7da; color: #721c24;{{/eq}}
+          ">
+            {{this.status}}
+          </span>
+        </td>
+        <td style="padding: 12px; color: #6c757d;">{{formatDate this.dateAcquired}}</td>
+        <td style="padding: 12px; text-align: center; font-weight: bold; color: #dc3545;">
+          {{calcAge this.dateAcquired}}
+        </td>
+      </tr>
+      {{else}}
+      <tr>
+        <td colspan="6" style="padding: 30px; text-align: center; color: #6c757d; font-style: italic;">No aging assets found. All assets are within acceptable lifecycle.</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<div style="margin-top: 20px; padding: 15px; background: #e7f3ff; border-radius: 8px; border-left: 4px solid #007bff;">
+  <strong>📋 Recommendation:</strong> Assets exceeding 7+ years should be considered for retirement or replacement to maintain system performance and reliability.
+</div>
