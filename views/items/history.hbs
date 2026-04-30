@@ -1,54 +1,49 @@
 <div style="margin-bottom: 20px;">
-  <a href="/items" style="text-decoration: none; color: #007bff; font-weight: bold;">&larr; Back to Inventory</a>
+  <a href="/items" class="btn btn-secondary">&larr; Back to Inventory</a>
 </div>
 
-<div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; border: 1px solid #e9ecef;">
-  <h2 style="margin-top: 0; color: #343a40;">Asset History: {{item.brand}} {{item.model}}</h2>
-  <div style="color: #495057; font-size: 1.1em;">
-    <strong>Serial Number:</strong> {{item.serialNumber}} &nbsp;|&nbsp; 
-    <strong>Category:</strong> {{item.category}} &nbsp;|&nbsp; 
-    <strong>Status:</strong> 
-    <span style="background: #e2e3e5; padding: 4px 8px; border-radius: 4px; font-weight: bold;">{{item.status}}</span>
-  </div>
+<div class="panel" style="margin-bottom: 20px;">
+  <h2>Asset History: {{item.brand}} {{item.model}}</h2>
+  <p>
+    <strong>Serial Number:</strong> {{item.serialNumber}} &nbsp;|&nbsp;
+    <strong>Category:</strong> {{item.category}} &nbsp;|&nbsp;
+    <strong>Status:</strong> <code>{{item.status}}</code>
+  </p>
 </div>
 
-<div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 1px solid #e9ecef;">
-  <h3 style="margin-top: 0; color: #343a40; border-bottom: 2px solid #f8f9fa; padding-bottom: 10px;">Transaction Log</h3>
-  
-  <table style="width: 100%; border-collapse: collapse; text-align: left;">
+<div class="panel">
+  <h3 style="border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 0;">Transaction Log</h3>
+
+  <table>
     <thead>
-      <tr style="background: #f8f9fa; color: #495057;">
-        <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">Date</th>
-        <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">Action</th>
-        <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">User</th>
-        <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">Duration</th>
-        <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">Notes</th>
-        <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">Reference File</th>
+      <tr>
+        <th>Date</th>
+        <th>Action</th>
+        <th>User</th>
+        <th>Duration</th>
+        <th>Notes</th>
+        <th>Reference File</th>
       </tr>
     </thead>
     <tbody>
       {{#each history}}
-      <tr style="border-bottom: 1px solid #e9ecef;">
-        <td style="padding: 12px; color: #6c757d;">{{formatDate this.createdAt}}</td>
-        <td style="padding: 12px;">
-            <span style="text-transform: uppercase; font-size: 0.85em; font-weight: bold; letter-spacing: 0.5px;">
-                {{this.action}}
-            </span>
-        </td>
-        <td style="padding: 12px; font-weight: bold;">{{this.user.username}}</td>
-        <td style="padding: 12px; color: #6c757d;">{{#if this.duration}}{{this.duration}}{{else}}—{{/if}}</td>
-        <td style="padding: 12px; color: #495057;">{{this.notes}}</td>
-        <td style="padding: 12px;">
+      <tr>
+        <td style="color: var(--text-muted);">{{formatDate this.createdAt}}</td>
+        <td style="text-transform: uppercase; font-size: 0.85em; font-weight: bold; letter-spacing: 0.5px;">{{this.action}}</td>
+        <td style="font-weight: bold;">{{this.user.username}}</td>
+        <td style="color: var(--text-muted);">{{#if this.duration}}{{this.duration}}{{else}}—{{/if}}</td>
+        <td>{{this.notes}}</td>
+        <td>
           {{#if this.documentPath}}
-            <a href="/{{this.documentPath}}" target="_blank" style="background: #007bff; color: white; padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 0.9em;">View Document</a>
+            <a href="/{{this.documentPath}}" target="_blank" class="btn btn-primary" style="font-size: 0.85em;">View Document</a>
           {{else}}
-            <span style="color: #adb5bd; font-style: italic;">No file attached</span>
+            <span style="color: var(--text-muted); font-style: italic;">No file attached</span>
           {{/if}}
         </td>
       </tr>
       {{else}}
       <tr>
-        <td colspan="6" style="padding: 30px; text-align: center; color: #6c757d; font-style: italic;">No transaction history exists for this asset yet.</td>
+        <td colspan="6" style="text-align: center; color: var(--text-muted); font-style: italic; padding: 30px;">No transaction history exists for this asset yet.</td>
       </tr>
       {{/each}}
     </tbody>

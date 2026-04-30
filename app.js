@@ -46,11 +46,11 @@ app.engine(
         return age;
       },
       div: (a, b) => (b !== 0 ? a / b : 0),
+      mult: (a, b) => a * b,
+      round: (num, decimals) => Math.round(num * Math.pow(10, decimals)) / Math.pow(10, decimals),
       or: (a, b) => a || b,
       startsWith: (str, prefix) => str && str.startsWith(prefix),
       includes: (str, substr) => str && str.includes(substr),
-      mult: (a, b) => a * b,
-      round: (num, decimals) => Math.round(num * Math.pow(10, decimals)) / Math.pow(10, decimals),
     },
   }),
 );
