@@ -3,6 +3,7 @@ const auth = require("../middleware/auth");
 const rbac = require("../middleware/rbac");
 const Item = require("../models/Item");
 const Transaction = require("../models/Transaction");
+const User = require("../models/User");
 
 // GET /reports - Dashboard with links to all reports
 router.get("/", auth, rbac("Admin"), async (req, res) => {
@@ -35,14 +36,11 @@ router.get("/", auth, rbac("Admin"), async (req, res) => {
 router.get("/inventory", auth, rbac("Admin"), async (req, res) => {
   try {
     const allItems = await Item.find({ isDeleted: false }).lean();
-    const inUseItems = await Item.find({ isDeleted: false, status: "In-Use" }).lean();
-    const availableItems = await Item.find({ isDeleted: false, status: "Available" }).lean();
-    const maintenanceItems = await Item.find({ isDeleted: false, status: "Maintenance" }).lean();
-
     const total = allItems.length;
-    const deployed = inUseItems.length;
-    const available = availableItems.length;
-    const maintenance = maintenanceItems.length;
+    const available = allItems.filter(i => i.status === "Available").length;
+    const deployed = allItems.filter(i => i.status === "In-Use").length;
+    const maintenance = allItems.filter(i => i.status === "Maintenance").length;
+    const retired = allItems.filter(i => i.status === "Retired").length;
     const deploymentRate = total > 0 ? ((deployed / total) * 100).toFixed(2) : 0;
 
     res.render("reports/inventory", {
@@ -52,6 +50,7 @@ router.get("/inventory", auth, rbac("Admin"), async (req, res) => {
         deployed,
         available,
         maintenance,
+        retired,
         deploymentRate,
       },
       items: allItems,
@@ -111,6 +110,28 @@ router.get("/aging", auth, rbac("Admin"), async (req, res) => {
       title: "Error", 
       message: "Failed to load aging report" 
     });
+  }
+});
+
+// GET /reports/users - User Audit
+router.get("/users", auth, rbac("Admin"), async (req, res) => {
+  try {
+    const users = await User.find().select("username email").lean();
+    let transactions = [];
+    let selectedUser = null;
+
+    if (req.query.userId) {
+      selectedUser = await User.findById(req.query.userId).select("username email").lean();
+      transactions = await Transaction.find({ user: req.query.userId })
+        .populate("item", "serialNumber brand model status")
+        .sort({ createdAt: -1 })
+        .lean();
+    }
+
+    res.render("reports/users", { title: "User Audit", users, transactions, selectedUser });
+  } catch (error) {
+    console.error(error);
+    res.status(500).render("error", { title: "Error", message: "Failed to load user audit" });
   }
 });
 
