@@ -126,7 +126,12 @@ router.get("/users", auth, rbac("Admin"), async (req, res) => {
         .populate("item", "serialNumber brand model status")
         .sort({ createdAt: -1 })
         .lean();
-      transactions = transactions.filter(t => t.item && t.item.status === "In-Use");
+      const seen = new Set();
+      transactions = transactions.filter(t => {
+        if (!t.item || t.item.status !== "In-Use" || seen.has(t.item._id.toString())) return false;
+        seen.add(t.item._id.toString());
+        return true;
+      });
     }
 
     res.render("reports/users", { title: "User Audit", users, transactions, selectedUser });
