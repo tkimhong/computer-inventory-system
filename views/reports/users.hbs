@@ -6,7 +6,7 @@
     <option value="">-- choose a user --</option>
     {{#each users}}
     <option value="{{this._id}}" {{#eq this._id ../selectedUser._id}}selected{{/eq}}>
-      {{this.username}} ({{this.email}})
+      {{this.username}}
     </option>
     {{/each}}
   </select>
