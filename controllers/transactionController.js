@@ -3,7 +3,8 @@ const Item = require("../models/Item");
 
 exports.checkout = async (request, response) => {
   try {
-    const { itemId, userId, notes } = request.body;
+    const { itemId, notes } = request.body;
+    const userId = request.user._id;
 
     const item = await Item.findById(itemId);
     if (!item || item.isDeleted)
@@ -24,7 +25,7 @@ exports.checkout = async (request, response) => {
       notes,
     });
 
-    response.status(201).json(transaction);
+    response.redirect("/transactions");
   } catch (error) {
     response.status(500).json({ message: error.message });
   }
@@ -32,7 +33,8 @@ exports.checkout = async (request, response) => {
 
 exports.checkin = async (request, response) => {
   try {
-    const { itemId, userId, notes } = request.body;
+    const { itemId, notes } = request.body;
+    const userId = request.user._id;
 
     const item = await Item.findById(itemId);
     if (!item || item.isDeleted)
@@ -53,7 +55,7 @@ exports.checkin = async (request, response) => {
       notes,
     });
 
-    response.status(201).json(transaction);
+    response.redirect("/transactions");
   } catch (error) {
     response.status(500).json({ message: error.message });
   }

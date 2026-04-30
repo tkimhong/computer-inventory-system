@@ -1,0 +1,38 @@
+<h2>Transaction History</h2>
+
+<div style="margin-bottom: 20px;">
+  <a href="/transactions/checkout" class="btn btn-primary">Check Out</a>
+  <a
+    href="/transactions/checkin"
+    class="btn btn-danger"
+    style="margin-left: 8px;"
+  >Check In</a>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Action</th>
+      <th>Item</th>
+      <th>User</th>
+      <th>Notes</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each transactions}}
+      <tr>
+        <td>{{this.action}}</td>
+        <td>{{this.item.serialNumber}}</td>
+        <td>{{this.user.username}}</td>
+        <td>{{this.notes}}</td>
+        <td>{{formatDate this.createdAt}}</td>
+      </tr>
+    {{else}}
+      <tr>
+        <td colspan="5" style="text-align:center; color:#6c757d;">No
+          transactions yet.</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
