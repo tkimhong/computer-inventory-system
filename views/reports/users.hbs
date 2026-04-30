@@ -1,0 +1,44 @@
+<h2>User Audit</h2>
+
+<form method="GET" action="/reports/users" style="margin-bottom: 30px;">
+  <label for="userId">Select User:</label>
+  <select name="userId" id="userId" style="padding: 8px; margin: 0 8px;">
+    <option value="">-- choose a user --</option>
+    {{#each users}}
+    <option value="{{this._id}}" {{#eq this._id ../selectedUser._id}}selected{{/eq}}>
+      {{this.username}} ({{this.email}})
+    </option>
+    {{/each}}
+  </select>
+  <button type="submit" class="btn btn-primary">View Assets</button>
+</form>
+
+{{#if selectedUser}}
+<h3>Assets for {{selectedUser.username}}</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Serial No.</th>
+      <th>Brand & Model</th>
+      <th>Status</th>
+      <th>Action</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each transactions}}
+    <tr>
+      <td>{{this.item.serialNumber}}</td>
+      <td>{{this.item.brand}} {{this.item.model}}</td>
+      <td>{{this.item.status}}</td>
+      <td>{{this.action}}</td>
+      <td>{{formatDate this.createdAt}}</td>
+    </tr>
+    {{else}}
+    <tr>
+      <td colspan="5" style="text-align:center; color:#6c757d;">No transactions found for this user.</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+{{/if}}
