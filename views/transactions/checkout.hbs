@@ -1,5 +1,11 @@
 <h1>Check Out Item</h1>
 
+{{#if error}}
+<div style="background:#f8d7da; color:#721c24; border:1px solid #f5c6cb; padding:12px; border-radius:4px; margin-bottom:16px;">
+  ❌ {{error}}
+</div>
+{{/if}}
+
 <form
   action="/api/transactions/checkout"
   method="POST"

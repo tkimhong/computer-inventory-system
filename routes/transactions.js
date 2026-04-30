@@ -31,12 +31,12 @@ router.get("/", auth, async (request, response) => {
 
 // GET /transactions/checkout
 router.get("/checkout", auth, (request, response) =>
-  response.render("transactions/checkout", { title: "Check Out Item" }),
+  response.render("transactions/checkout", { title: "Check Out Item", error: request.query.error }),
 );
 
 // GET /transactions/checkin
 router.get("/checkin", auth, (request, response) =>
-  response.render("transactions/checkin", { title: "Check In Item" }),
+  response.render("transactions/checkin", { title: "Check In Item", error: request.query.error }),
 );
 
 module.exports = router;
