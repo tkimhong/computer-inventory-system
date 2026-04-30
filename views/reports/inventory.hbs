@@ -45,6 +45,11 @@
       <td style="padding: 12px; text-align: center;">{{stats.maintenance}}</td>
       <td style="padding: 12px; text-align: center;">{{#if (gt stats.total 0)}}{{round (mult (div stats.maintenance stats.total) 100) 2}}%{{else}}0%{{/if}}</td>
     </tr>
+    <tr style="border-bottom: 1px solid #f3f4f6;">
+      <td style="padding: 12px; color: #374151;"><strong>Retired</strong></td>
+      <td style="padding: 12px; text-align: center;">{{stats.retired}}</td>
+      <td style="padding: 12px; text-align: center;">{{#if (gt stats.total 0)}}{{round (mult (div stats.retired stats.total) 100) 2}}%{{else}}0%{{/if}}</td>
+    </tr>
   </table>
 </div>
 
