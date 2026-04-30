@@ -18,6 +18,7 @@ const inventoryRoutes = require("./routes/inventory");
 const authUiRoutes = require("./routes/auth_ui");
 const usersUiRoutes = require("./routes/users_ui");
 const keysUiRoutes = require("./routes/keys_ui");
+const reportingRoutes = require("./routes/reporting");
 
 const app = express();
 
@@ -32,7 +33,21 @@ app.engine(
     extname: ".hbs",
     helpers: {
       eq: (a, b) => a === b,
+      gt: (a, b) => a > b,
       formatDate: (date) => (date ? new Date(date).toLocaleDateString() : ""),
+      calcAge: (dateAcquired) => {
+        const now = new Date();
+        const acquired = new Date(dateAcquired);
+        let age = now.getFullYear() - acquired.getFullYear();
+        const monthDiff = now.getMonth() - acquired.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < acquired.getDate())) {
+          age--;
+        }
+        return age;
+      },
+      div: (a, b) => (b !== 0 ? a / b : 0),
+      mult: (a, b) => a * b,
+      round: (num, decimals) => Math.round(num * Math.pow(10, decimals)) / Math.pow(10, decimals),
     },
   }),
 );
@@ -66,6 +81,7 @@ app.use("/logout", authUiRoutes);
 app.use("/transactions", transactionRoutes);
 app.use("/users", usersUiRoutes);
 app.use("/keys", keysUiRoutes);
+app.use("/reports", reportingRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () =>

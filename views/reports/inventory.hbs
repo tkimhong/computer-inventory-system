@@ -1,0 +1,92 @@
+<h2>Inventory Status Report</h2>
+
+<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
+  <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); border-left: 4px solid #4b5563;">
+    <div style="font-size: 0.9em; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">Total Assets</div>
+    <div style="font-size: 2.5em; font-weight: bold; color: #111827; margin-top: 10px;">{{stats.total}}</div>
+  </div>
+
+  <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); border-left: 4px solid #10b981;">
+    <div style="font-size: 0.9em; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">Available</div>
+    <div style="font-size: 2.5em; font-weight: bold; color: #065f46; margin-top: 10px;">{{stats.available}}</div>
+  </div>
+
+  <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); border-left: 4px solid #f59e0b;">
+    <div style="font-size: 0.9em; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">Deployed (In-Use)</div>
+    <div style="font-size: 2.5em; font-weight: bold; color: #92400e; margin-top: 10px;">{{stats.deployed}}</div>
+  </div>
+
+  <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); border-left: 4px solid #ef4444;">
+    <div style="font-size: 0.9em; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">Deployment Rate</div>
+    <div style="font-size: 2.5em; font-weight: bold; color: #991b1b; margin-top: 10px;">{{stats.deploymentRate}}%</div>
+  </div>
+</div>
+
+<div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 3px 6px rgba(0,0,0,0.08); margin-bottom: 20px;">
+  <h3 style="margin-top: 0; color: #111827;">Asset Breakdown</h3>
+  <table style="width: 100%; border-collapse: collapse;">
+    <tr style="border-bottom: 2px solid #e5e7eb;">
+      <th style="padding: 12px; text-align: left; color: #ffffff;">Status</th>
+      <th style="padding: 12px; text-align: center; color: #ffffff;">Count</th>
+      <th style="padding: 12px; text-align: center; color: #ffffff;">Percentage</th>
+    </tr>
+    <tr style="border-bottom: 1px solid #f3f4f6;">
+      <td style="padding: 12px; color: #374151;"><strong>Available</strong></td>
+      <td style="padding: 12px; text-align: center;">{{stats.available}}</td>
+      <td style="padding: 12px; text-align: center;">{{#if (gt stats.total 0)}}{{round (mult (div stats.available stats.total) 100) 2}}%{{else}}0%{{/if}}</td>
+    </tr>
+    <tr style="border-bottom: 1px solid #f3f4f6;">
+      <td style="padding: 12px; color: #374151;"><strong>In-Use (Deployed)</strong></td>
+      <td style="padding: 12px; text-align: center;">{{stats.deployed}}</td>
+      <td style="padding: 12px; text-align: center;">{{#if (gt stats.total 0)}}{{round (mult (div stats.deployed stats.total) 100) 2}}%{{else}}0%{{/if}}</td>
+    </tr>
+    <tr style="border-bottom: 1px solid #f3f4f6;">
+      <td style="padding: 12px; color: #374151;"><strong>Maintenance</strong></td>
+      <td style="padding: 12px; text-align: center;">{{stats.maintenance}}</td>
+      <td style="padding: 12px; text-align: center;">{{#if (gt stats.total 0)}}{{round (mult (div stats.maintenance stats.total) 100) 2}}%{{else}}0%{{/if}}</td>
+    </tr>
+    <tr style="border-bottom: 1px solid #f3f4f6;">
+      <td style="padding: 12px; color: #374151;"><strong>Retired</strong></td>
+      <td style="padding: 12px; text-align: center;">{{stats.retired}}</td>
+      <td style="padding: 12px; text-align: center;">{{#if (gt stats.total 0)}}{{round (mult (div stats.retired stats.total) 100) 2}}%{{else}}0%{{/if}}</td>
+    </tr>
+  </table>
+</div>
+
+<div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 3px 6px rgba(18, 18, 18, 0.08);">
+  <h3 style="margin-top: 0; color: #111827;">All Assets</h3>
+  <table style="width: 100%; border-collapse: collapse;">
+    <thead>
+      <tr style="background: #f9fafb; border-bottom: 2px solid #e5e7eb;">
+        <th style="padding: 12px; text-align: left; color: #ffffff;">Serial No.</th>
+        <th style="padding: 12px; text-align: left; color: #ffffff;">Brand & Model</th>
+        <th style="padding: 12px; text-align: left; color: #ffffff;">Category</th>
+        <th style="padding: 12px; text-align: left; color: #ffffff;">Status</th>
+        <th style="padding: 12px; text-align: left; color: #f7f7f7;">Acquired</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each items}}
+      <tr style="border-bottom: 1px solid #f3f4f6;">
+        <td style="padding: 12px; font-weight: bold; color: #1f2937;">{{this.serialNumber}}</td>
+        <td style="padding: 12px;">{{this.brand}} {{this.model}}</td>
+        <td style="padding: 12px;">{{this.category}}</td>
+        <td style="padding: 12px;">
+          <span style="padding: 4px 8px; border-radius: 4px; font-size: 0.85em; font-weight: bold; 
+            {{#eq this.status 'Available'}}background: #ecfdf5; color: #065f46;{{/eq}}
+            {{#eq this.status 'In-Use'}}background: #fffbeb; color: #92400e;{{/eq}}
+            {{#eq this.status 'Maintenance'}}background: #fef2f2; color: #991b1b;{{/eq}}
+          ">
+            {{this.status}}
+          </span>
+        </td>
+        <td style="padding: 12px; color: #6b7280;">{{formatDate this.dateAcquired}}</td>
+      </tr>
+      {{else}}
+      <tr>
+        <td colspan="5" style="padding: 30px; text-align: center; color: #6b7280; font-style: italic;">No assets found.</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
