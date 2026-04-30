@@ -45,7 +45,7 @@ app.engine(
         }
         return age;
       },
-      div: (a, b) => a / b,
+      div: (a, b) => (b !== 0 ? a / b : 0),
       mult: (a, b) => a * b,
       round: (num, decimals) => Math.round(num * Math.pow(10, decimals)) / Math.pow(10, decimals),
     },
