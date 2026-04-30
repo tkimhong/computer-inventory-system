@@ -53,8 +53,13 @@
       <td>{{this.brand}} {{this.model}}</td>
       <td>{{this.category}}</td>
       <td>
-          <span style="padding: 4px 8px; border-radius: 4px; font-size: 0.9em; background: #e9ecef;">
-              {{this.status}}
+          <span style="padding: 4px 8px; border-radius: 4px; font-size: 0.9em; font-weight: bold;
+            {{#eq this.status 'Available'}}background: #ecfdf5; color: #065f46;{{/eq}}
+            {{#eq this.status 'In-Use'}}background: #fffbeb; color: #92400e;{{/eq}}
+            {{#eq this.status 'Maintenance'}}background: #fef2f2; color: #991b1b;{{/eq}}
+            {{#eq this.status 'Retired'}}background: #f3f4f6; color: #6b7280;{{/eq}}
+          ">
+            {{this.status}}
           </span>
       </td>
       <td>{{formatDate this.dateAcquired}}</td>
