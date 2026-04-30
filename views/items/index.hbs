@@ -1,14 +1,12 @@
 <h2>Computer Inventory Management</h2>
 
-<div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #dee2e6;">
+<div class="panel" style="margin-bottom: 20px;">
   <h3>Add New Asset</h3>
   <form action="/api/items" method="POST" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-    
-    <input type="text" name="serialNumber" placeholder="Serial Number (Required)" required style="padding: 10px;">
-    <input type="text" name="brand" placeholder="Brand (e.g., Dell, Apple)" required style="padding: 10px;">
-    <input type="text" name="model" placeholder="Model (e.g., XPS 15, MacBook Pro)" required style="padding: 10px;">
-    
-    <select name="category" required style="padding: 10px;">
+    <input type="text" name="serialNumber" placeholder="Serial Number (Required)" required>
+    <input type="text" name="brand" placeholder="Brand (e.g., Dell, Apple)" required>
+    <input type="text" name="model" placeholder="Model (e.g., XPS 15, MacBook Pro)" required>
+    <select name="category" required>
       <option value="" disabled selected>Select Classification...</option>
       <optgroup label="Computers">
         <option value="Laptop">Laptop</option>
@@ -22,14 +20,14 @@
       </optgroup>
     </select>
 
-    <select name="status" style="padding: 10px;">
+    <select name="status">
       <option value="Available">Available</option>
       <option value="In-Use">In-Use</option>
       <option value="Maintenance">Maintenance</option>
       <option value="Retired">Retired</option>
     </select>
 
-    <input type="date" name="dateAcquired" style="padding: 10px;">
+    <input type="date" name="dateAcquired">
 
     <button type="submit" class="btn btn-primary" style="grid-column: span 2;">Register Asset</button>
   </form>
@@ -53,20 +51,18 @@
       <td>{{this.brand}} {{this.model}}</td>
       <td>{{this.category}}</td>
       <td>
-          <span style="padding: 4px 8px; border-radius: 4px; font-size: 0.9em; font-weight: bold;
-            {{#eq this.status 'Available'}}background: #ecfdf5; color: #065f46;{{/eq}}
-            {{#eq this.status 'In-Use'}}background: #fffbeb; color: #92400e;{{/eq}}
-            {{#eq this.status 'Maintenance'}}background: #fef2f2; color: #991b1b;{{/eq}}
-            {{#eq this.status 'Retired'}}background: #f3f4f6; color: #6b7280;{{/eq}}
-          ">
-            {{this.status}}
-          </span>
+        <span style="padding: 4px 8px; border-radius: 4px; font-size: 0.85em; font-weight: bold;
+          {{#eq this.status 'Available'}}background: rgba(132,204,22,0.15); color: var(--green);{{/eq}}
+          {{#eq this.status 'In-Use'}}background: rgba(245,158,11,0.15); color: var(--amber);{{/eq}}
+          {{#eq this.status 'Maintenance'}}background: rgba(220,38,38,0.15); color: var(--red);{{/eq}}
+          {{#eq this.status 'Retired'}}background: rgba(148,163,184,0.15); color: var(--text-muted);{{/eq}}
+        ">{{this.status}}</span>
       </td>
       <td>{{formatDate this.dateAcquired}}</td>
       <td>
-        <a href="/items/{{this._id}}/history" class="btn btn-primary" style="text-decoration: none; margin-right: 5px;">View History</a>
-        <button onclick="openEdit('{{this._id}}','{{this.serialNumber}}','{{this.brand}}','{{this.model}}','{{this.category}}','{{this.status}}')" class="btn" style="background:#6c757d; margin-right:5px;">Edit</button>
-        <button onclick="softDelete('{{this._id}}')" class="btn btn-danger">Remove</button>
+        <a href="/items/{{this._id}}/history" class="btn btn-primary" style="margin-right: 5px; font-size: 0.8em;">History</a>
+        <button onclick="openEdit('{{this._id}}','{{this.serialNumber}}','{{this.brand}}','{{this.model}}','{{this.category}}','{{this.status}}')" class="btn btn-secondary" style="margin-right:5px; font-size: 0.8em;">Edit</button>
+        <button onclick="softDelete('{{this._id}}')" class="btn btn-danger" style="font-size: 0.8em;">Remove</button>
       </td>
     </tr>
     {{else}}
@@ -78,16 +74,16 @@
 </table>
 
 <!-- Edit Modal -->
-<div id="editModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:center;">
-  <div style="background:white; padding:30px; border-radius:8px; width:500px; max-width:90%;">
-    <h3 style="margin-top:0;">Edit Asset</h3>
-    <div id="editMsg" style="display:none; margin-bottom:10px; padding:10px; border-radius:4px;"></div>
+<div id="editModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000; justify-content:center; align-items:center;">
+  <div style="background: var(--navy-light); border: 1px solid var(--border); padding:30px; border-radius:12px; width:500px; max-width:90%;">
+    <h3>Edit Asset</h3>
+    <div id="editMsg" style="display:none; margin-bottom:10px;"></div>
     <input type="hidden" id="editId">
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-      <input type="text" id="editSerial" placeholder="Serial Number" style="padding:10px;">
-      <input type="text" id="editBrand" placeholder="Brand" style="padding:10px;">
-      <input type="text" id="editModel" placeholder="Model" style="padding:10px;">
-      <select id="editCategory" style="padding:10px;">
+      <input type="text" id="editSerial" placeholder="Serial Number">
+      <input type="text" id="editBrand" placeholder="Brand">
+      <input type="text" id="editModel" placeholder="Model">
+      <select id="editCategory">
         <optgroup label="Computers">
           <option value="Laptop">Laptop</option>
           <option value="Desktop">Desktop</option>
@@ -99,7 +95,7 @@
           <option value="Mouse">Mouse</option>
         </optgroup>
       </select>
-      <select id="editStatus" style="padding:10px; grid-column:span 2;">
+      <select id="editStatus" style="grid-column:span 2;">
         <option value="Available">Available</option>
         <option value="In-Use">In-Use</option>
         <option value="Maintenance">Maintenance</option>
@@ -107,7 +103,7 @@
       </select>
     </div>
     <div style="margin-top:15px; display:flex; gap:10px; justify-content:flex-end;">
-      <button onclick="closeEdit()" class="btn" style="background:#6c757d;">Cancel</button>
+      <button onclick="closeEdit()" class="btn btn-secondary">Cancel</button>
       <button onclick="saveEdit()" class="btn btn-primary">Save</button>
     </div>
   </div>
@@ -149,12 +145,14 @@
         window.location.reload();
       } else {
         const data = await res.json();
-        msg.style.cssText = 'display:block; background:#f8d7da; color:#721c24; border:1px solid #f5c6cb; padding:10px; border-radius:4px;';
-        msg.textContent = `❌ ${data.error || 'Failed to update item'}`;
+        msg.className = 'alert-error';
+        msg.style.display = 'block';
+        msg.textContent = data.error || 'Failed to update item';
       }
     } catch (err) {
-      msg.style.cssText = 'display:block; background:#f8d7da; color:#721c24; border:1px solid #f5c6cb; padding:10px; border-radius:4px;';
-      msg.textContent = '❌ Network error.';
+      msg.className = 'alert-error';
+      msg.style.display = 'block';
+      msg.textContent = 'Network error.';
     }
   }
 

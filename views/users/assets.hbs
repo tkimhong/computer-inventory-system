@@ -1,7 +1,9 @@
-<a href="/users" style="text-decoration:none; color:#007bff;">← Back to Users</a>
+<div style="margin-bottom: 20px;">
+  <a href="/users" class="btn btn-secondary">&larr; Back to Users</a>
+</div>
 
-<h2 style="margin-top:15px;">Assets for <strong>{{user.username}}</strong></h2>
-<p style="color:#6c757d;">Role: {{user.role}} &nbsp;|&nbsp; Status: {{#if user.isActive}}Active{{else}}Disabled{{/if}}</p>
+<h2>Assets for <strong>{{user.username}}</strong></h2>
+<p>Role: {{user.role}} &nbsp;|&nbsp; Status: {{#if user.isActive}}Active{{else}}Disabled{{/if}}</p>
 
 {{#if assets}}
   <table>
@@ -21,11 +23,18 @@
           <td>{{this.item.model}}</td>
           <td>{{this.item.brand}}</td>
           <td>{{this.item.category}}</td>
-          <td><span style="color:#007bff; font-weight:bold;">{{this.item.status}}</span></td>
+          <td>
+            <span style="padding: 4px 8px; border-radius: 4px; font-size: 0.85em; font-weight: bold;
+              {{#eq this.item.status 'Available'}}background: rgba(132,204,22,0.15); color: var(--green);{{/eq}}
+              {{#eq this.item.status 'In-Use'}}background: rgba(245,158,11,0.15); color: var(--amber);{{/eq}}
+              {{#eq this.item.status 'Maintenance'}}background: rgba(220,38,38,0.15); color: var(--red);{{/eq}}
+              {{#eq this.item.status 'Retired'}}background: rgba(148,163,184,0.15); color: var(--text-muted);{{/eq}}
+            ">{{this.item.status}}</span>
+          </td>
         </tr>
       {{/each}}
     </tbody>
   </table>
 {{else}}
-  <p style="text-align:center; color:#6c757d; margin-top:30px;">No assets currently assigned to this user.</p>
+  <p style="text-align:center; color: var(--text-muted); margin-top:30px;">No assets currently assigned to this user.</p>
 {{/if}}
