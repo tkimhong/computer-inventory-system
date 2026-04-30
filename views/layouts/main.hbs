@@ -58,11 +58,11 @@
 
   <nav>
     <a href="/" class="brand">🖥️ Inventory</a>
-    <a href="/items" {{#if (eq title 'Inventory')}}class="active"{{/if}}>Items</a>
-    <a href="/users" {{#if (eq title 'User Management')}}class="active"{{/if}}>Users</a>
-    <a href="/transactions" {{#if (eq title 'Transactions')}}class="active"{{/if}}>Transactions</a>
-    <a href="/keys" {{#if (eq title 'Keys')}}class="active"{{/if}}>Keys</a>
-    <a href="/reports" {{#if (eq title 'Inventory Status Report')}}class="active"{{/if}}>Reports</a>
+    <a href="/items" {{#if (or (eq title 'Inventory Management') (startsWith title 'Asset History'))}}class="active"{{/if}}>Items</a>
+    <a href="/users" {{#if (or (eq title 'User Management') (startsWith title 'Assets for'))}}class="active"{{/if}}>Users</a>
+    <a href="/transactions" {{#if (or (eq title 'Transactions') (startsWith title 'Check'))}}class="active"{{/if}}>Transactions</a>
+    <a href="/keys" {{#if (eq title 'API Key Management')}}class="active"{{/if}}>Keys</a>
+    <a href="/reports" {{#if (or (includes title 'Report') (eq title 'User Audit'))}}class="active"{{/if}}>Reports</a>
     <span class="nav-right">
       <a href="/login/logout">Logout</a>
     </span>

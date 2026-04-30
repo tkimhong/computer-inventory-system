@@ -21,6 +21,7 @@
         <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">Date</th>
         <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">Action</th>
         <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">User</th>
+        <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">Duration</th>
         <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">Notes</th>
         <th style="padding: 12px; border-bottom: 2px solid #dee2e6;">Reference File</th>
       </tr>
@@ -35,6 +36,7 @@
             </span>
         </td>
         <td style="padding: 12px; font-weight: bold;">{{this.user.username}}</td>
+        <td style="padding: 12px; color: #6c757d;">{{#if this.duration}}{{this.duration}}{{else}}—{{/if}}</td>
         <td style="padding: 12px; color: #495057;">{{this.notes}}</td>
         <td style="padding: 12px;">
           {{#if this.documentPath}}
@@ -46,7 +48,7 @@
       </tr>
       {{else}}
       <tr>
-        <td colspan="5" style="padding: 30px; text-align: center; color: #6c757d; font-style: italic;">No transaction history exists for this asset yet.</td>
+        <td colspan="6" style="padding: 30px; text-align: center; color: #6c757d; font-style: italic;">No transaction history exists for this asset yet.</td>
       </tr>
       {{/each}}
     </tbody>

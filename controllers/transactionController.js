@@ -8,16 +8,18 @@ exports.checkout = async (request, response) => {
 
     const item = await Item.findById(itemId);
     if (!item || item.isDeleted)
-      return response.status(404).json({ message: "Item not found" });
+      return request.accepts("html")
+        ? response.redirect("/transactions/checkout?error=Item not found")
+        : response.status(404).json({ message: "Item not found" });
     if (item.status !== "Available")
-      return response
-        .status(400)
-        .json({ message: "Item is not available for checkout" });
+      return request.accepts("html")
+        ? response.redirect("/transactions/checkout?error=Item is not available for checkout")
+        : response.status(400).json({ message: "Item is not available for checkout" });
 
     item.status = "In-Use";
     await item.save();
 
-    const transaction = await Transaction.create({
+    await Transaction.create({
       item: itemId,
       user: userId,
       action: "checkout",
@@ -38,16 +40,18 @@ exports.checkin = async (request, response) => {
 
     const item = await Item.findById(itemId);
     if (!item || item.isDeleted)
-      return response.status(404).json({ message: "Item not found" });
+      return request.accepts("html")
+        ? response.redirect("/transactions/checkin?error=Item not found")
+        : response.status(404).json({ message: "Item not found" });
     if (item.status !== "In-Use")
-      return response
-        .status(400)
-        .json({ message: "Item is not currently checked out" });
+      return request.accepts("html")
+        ? response.redirect("/transactions/checkin?error=Item is not currently checked out")
+        : response.status(400).json({ message: "Item is not currently checked out" });
 
     item.status = "Available";
     await item.save();
 
-    const transaction = await Transaction.create({
+    await Transaction.create({
       item: itemId,
       user: userId,
       action: "checkin",

@@ -122,10 +122,16 @@ router.get("/users", auth, rbac("Admin"), async (req, res) => {
 
     if (req.query.userId) {
       selectedUser = await User.findById(req.query.userId).select("username email").lean();
-      transactions = await Transaction.find({ user: req.query.userId })
+      transactions = await Transaction.find({ user: req.query.userId, action: "checkout" })
         .populate("item", "serialNumber brand model status")
         .sort({ createdAt: -1 })
         .lean();
+      const seen = new Set();
+      transactions = transactions.filter(t => {
+        if (!t.item || t.item.status !== "In-Use" || seen.has(t.item._id.toString())) return false;
+        seen.add(t.item._id.toString());
+        return true;
+      });
     }
 
     res.render("reports/users", { title: "User Audit", users, transactions, selectedUser });

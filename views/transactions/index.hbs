@@ -17,6 +17,7 @@
       <th>User</th>
       <th>Notes</th>
       <th>Date</th>
+      <th>Document</th>
     </tr>
   </thead>
   <tbody>
@@ -27,11 +28,17 @@
         <td>{{this.user.username}}</td>
         <td>{{this.notes}}</td>
         <td>{{formatDate this.createdAt}}</td>
+        <td>
+          {{#if this.documentPath}}
+            <a href="/{{this.documentPath}}" target="_blank" class="btn btn-primary" style="font-size:0.85em; padding:4px 8px;">View</a>
+          {{else}}
+            <span style="color:#adb5bd; font-style:italic;">None</span>
+          {{/if}}
+        </td>
       </tr>
     {{else}}
       <tr>
-        <td colspan="5" style="text-align:center; color:#6c757d;">No
-          transactions yet.</td>
+        <td colspan="6" style="text-align:center; color:#6c757d;">No transactions yet.</td>
       </tr>
     {{/each}}
   </tbody>

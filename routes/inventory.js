@@ -23,11 +23,25 @@ router.get("/:id/history", auth, async (req, res) => {
         return res.status(404).send("Item not found or retired");
     }
 
-    // 2. Fetch the populated transaction history
-    const history = await Transaction.find({ item: req.params.id })
+    // 2. Fetch history oldest-first to pair checkouts with checkins
+    const rawHistory = await Transaction.find({ item: req.params.id })
       .populate("user", "username")
-      .sort({ createdAt: -1 })
+      .sort({ createdAt: 1 })
       .lean();
+
+    // Attach duration to each checkout by finding the next checkin
+    for (let i = 0; i < rawHistory.length; i++) {
+      if (rawHistory[i].action !== "checkout") continue;
+      const nextCheckin = rawHistory.find((r, idx) => idx > i && r.action === "checkin");
+      if (nextCheckin) {
+        const days = Math.ceil((new Date(nextCheckin.createdAt) - new Date(rawHistory[i].createdAt)) / (1000 * 60 * 60 * 24));
+        rawHistory[i].duration = days === 1 ? "1 day" : `${days} days`;
+      } else {
+        rawHistory[i].duration = "Ongoing";
+      }
+    }
+
+    const history = rawHistory.reverse();
 
     // 3. Render the view
     res.render("items/history", { item, history, title: `Asset History - ${item.model}` });
