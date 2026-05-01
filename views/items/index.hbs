@@ -1,8 +1,10 @@
 <h2>Computer Inventory Management</h2>
 
+{{#if error}}<div class="alert-error">{{error}}</div>{{/if}}
+
 <div class="panel" style="margin-bottom: 20px;">
   <h3>Add New Asset</h3>
-  <form action="/api/items" method="POST" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+  <form action="/items" method="POST" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
     <input type="text" name="serialNumber" placeholder="Serial Number (Required)" required>
     <input type="text" name="brand" placeholder="Brand (e.g., Dell, Apple)" required>
     <input type="text" name="model" placeholder="Model (e.g., XPS 15, MacBook Pro)" required>
@@ -61,7 +63,7 @@
       <td>{{formatDate this.dateAcquired}}</td>
       <td>
         <a href="/items/{{this._id}}/history" class="btn btn-primary" style="margin-right: 5px; font-size: 0.8em;">History</a>
-        <button onclick="openEdit('{{this._id}}','{{this.serialNumber}}','{{this.brand}}','{{this.model}}','{{this.category}}','{{this.status}}')" class="btn btn-secondary" style="margin-right:5px; font-size: 0.8em;">Edit</button>
+        <button onclick="openEdit('{{this._id}}','{{this.serialNumber}}','{{this.brand}}','{{this.model}}','{{this.category}}','{{this.status}}','{{this.dateAcquired}}')" class="btn btn-secondary" style="margin-right:5px; font-size: 0.8em;">Edit</button>
         <button onclick="softDelete('{{this._id}}')" class="btn btn-danger" style="font-size: 0.8em;">Remove</button>
       </td>
     </tr>
@@ -95,6 +97,7 @@
           <option value="Mouse">Mouse</option>
         </optgroup>
       </select>
+      <input type="date" id="editDate" style="grid-column:span 2;">
       <select id="editStatus" style="grid-column:span 2;">
         <option value="Available">Available</option>
         <option value="In-Use">In-Use</option>
@@ -110,13 +113,14 @@
 </div>
 
 <script>
-  function openEdit(id, serial, brand, model, category, status) {
+  function openEdit(id, serial, brand, model, category, status, dateAcquired) {
     document.getElementById('editId').value = id;
     document.getElementById('editSerial').value = serial;
     document.getElementById('editBrand').value = brand;
     document.getElementById('editModel').value = model;
     document.getElementById('editCategory').value = category;
     document.getElementById('editStatus').value = status;
+    document.getElementById('editDate').value = dateAcquired ? dateAcquired.substring(0, 10) : '';
     document.getElementById('editMsg').style.display = 'none';
     document.getElementById('editModal').style.display = 'flex';
   }
@@ -133,6 +137,7 @@
       model: document.getElementById('editModel').value,
       category: document.getElementById('editCategory').value,
       status: document.getElementById('editStatus').value,
+      dateAcquired: document.getElementById('editDate').value,
     };
     const msg = document.getElementById('editMsg');
     try {
