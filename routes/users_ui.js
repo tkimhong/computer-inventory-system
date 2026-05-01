@@ -37,13 +37,13 @@ router.get("/:id/assets", auth, async (req, res) => {
       user: req.params.id,
       action: "checkout",
     })
-      .populate("item", "serialNumber model brand category status")
+      .populate("item", "serialNumber model brand category status isDeleted")
       .sort({ createdAt: -1 })
       .lean();
 
     const seen = new Set();
     const assets = transactions.filter(t => {
-      if (!t.item || seen.has(t.item._id.toString())) return false;
+      if (!t.item || t.item.isDeleted || seen.has(t.item._id.toString())) return false;
       seen.add(t.item._id.toString());
       return true;
     });
