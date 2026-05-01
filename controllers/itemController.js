@@ -30,6 +30,10 @@ exports.getHistory = async (req, res) => {
 
 exports.createItem = async (req, res) => {
   try {
+    const existing = await Item.findOne({ serialNumber: req.body.serialNumber, isDeleted: false });
+    if (existing) {
+      return res.status(400).json({ error: "Serial number already in use." });
+    }
     const newItem = await Item.create({
       serialNumber: req.body.serialNumber,
       model: req.body.model,
