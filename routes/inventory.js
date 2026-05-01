@@ -7,10 +7,32 @@ const auth = require("../middleware/auth");
 router.get("/", auth, async (req, res) => {
   try {
     const items = await Item.find({ isDeleted: false }).sort({ createdAt: -1 }).lean();
-    res.render("items/index", { items, title: "Inventory Management" });
+    res.render("items/index", { items, title: "Inventory Management", error: req.query.error });
   } catch (error) {
     console.error(error);
     res.status(500).send("Server Error loading UI");
+  }
+});
+
+// POST / - Create item from UI form and redirect back
+router.post("/", auth, async (req, res) => {
+  try {
+    const existing = await Item.findOne({ serialNumber: req.body.serialNumber, isDeleted: false });
+    if (existing) {
+      return res.redirect("/items?error=Serial+number+already+in+use");
+    }
+    await Item.create({
+      serialNumber: req.body.serialNumber,
+      model: req.body.model,
+      brand: req.body.brand,
+      category: req.body.category,
+      status: req.body.status || "Available",
+      dateAcquired: req.body.dateAcquired || Date.now(),
+    });
+    res.redirect("/items");
+  } catch (error) {
+    console.error(error);
+    res.redirect("/items?error=Failed+to+create+item");
   }
 });
 
