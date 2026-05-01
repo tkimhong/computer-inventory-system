@@ -1,27 +1,27 @@
-<h2>Login</h2>
+<div style="max-width: 400px; margin: 0 auto; text-align: center; margin-bottom: 32px;">
+  <h1 style="color: var(--cyan-main); margin-bottom: 4px;">Inventory System</h1>
+  <p style="color: var(--text-muted); font-size: 0.85rem;">INF 653 · Group 2 · Computer Inventory Management</p>
+</div>
 
-{{#if error}}
-  <p style="color: red;">{{error}}</p>
-{{/if}}
+<div class="panel" style="max-width: 400px; margin: 0 auto;">
+  <h3 style="margin-bottom: 4px;">Welcome Back</h3>
+  <p style="margin-bottom: 20px; font-size: 0.85rem;">Sign in to your account</p>
 
-<form
-  action="/login"
-  method="POST"
-  style="display: flex; flex-direction: column; gap: 15px; max-width: 400px;"
->
-  <input
-    type="text"
-    name="username"
-    placeholder="Username"
-    required
-    style="padding: 10px;"
-  />
-  <input
-    type="password"
-    name="password"
-    placeholder="Password"
-    required
-    style="padding: 10px;"
-  />
-  <button type="submit" class="btn btn-primary">Login</button>
-</form>
+  {{#if error}}
+  <div class="alert-error">{{error}}</div>
+  {{/if}}
+
+  <form action="/login" method="POST" style="display: flex; flex-direction: column; gap: 15px;">
+    <div>
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" placeholder="Enter your username" required>
+    </div>
+    <div>
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter your password" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Sign In</button>
+  </form>
+</div>
+
+<p style="text-align: center; margin-top: 16px; font-size: 0.8rem; color: var(--text-muted);">Need an account? Contact your administrator.</p>

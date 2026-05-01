@@ -31,6 +31,7 @@ app.engine(
   engine({
     defaultLayout: "main",
     extname: ".hbs",
+    partialsDir: path.join(__dirname, "views/partials"),
     helpers: {
       eq: (a, b) => a === b,
       gt: (a, b) => a > b,

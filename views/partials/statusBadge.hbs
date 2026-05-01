@@ -1,0 +1,6 @@
+<span style="padding: 4px 8px; border-radius: 4px; font-size: 0.85em; font-weight: bold;
+  {{#eq status 'Available'}}background: rgba(132,204,22,0.15); color: var(--green);{{/eq}}
+  {{#eq status 'In-Use'}}background: rgba(245,158,11,0.15); color: var(--amber);{{/eq}}
+  {{#eq status 'Maintenance'}}background: rgba(220,38,38,0.15); color: var(--red);{{/eq}}
+  {{#eq status 'Retired'}}background: rgba(148,163,184,0.15); color: var(--text-muted);{{/eq}}
+">{{status}}</span>
