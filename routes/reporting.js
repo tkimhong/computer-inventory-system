@@ -77,24 +77,14 @@ router.get("/aging", auth, rbac("Admin"), async (req, res) => {
       .sort({ dateAcquired: 1 })
       .lean();
 
+    const now = new Date();
+    const fiveYearsAgo  = new Date(now); fiveYearsAgo.setFullYear(now.getFullYear() - 5);
+    const sevenYearsAgo = new Date(now); sevenYearsAgo.setFullYear(now.getFullYear() - 7);
+
     const ageBreakdown = {
-      threeToFive: agingItems.filter(
-        (item) =>
-          item.dateAcquired <= threeYearsAgo &&
-          item.dateAcquired > new Date(threeYearsAgo.getFullYear() - 5, threeYearsAgo.getMonth(), threeYearsAgo.getDate())
-      ).length,
-      fiveToSeven: agingItems.filter(
-        (item) =>
-          item.dateAcquired <=
-            new Date(threeYearsAgo.getFullYear() - 5, threeYearsAgo.getMonth(), threeYearsAgo.getDate()) &&
-          item.dateAcquired >
-            new Date(threeYearsAgo.getFullYear() - 7, threeYearsAgo.getMonth(), threeYearsAgo.getDate())
-      ).length,
-      sevenPlus: agingItems.filter(
-        (item) =>
-          item.dateAcquired <=
-          new Date(threeYearsAgo.getFullYear() - 7, threeYearsAgo.getMonth(), threeYearsAgo.getDate())
-      ).length,
+      threeToFive: agingItems.filter(i => i.dateAcquired > fiveYearsAgo).length,
+      fiveToSeven: agingItems.filter(i => i.dateAcquired <= fiveYearsAgo && i.dateAcquired > sevenYearsAgo).length,
+      sevenPlus:   agingItems.filter(i => i.dateAcquired <= sevenYearsAgo).length,
     };
 
     res.render("reports/aging", {
