@@ -1,25 +1,30 @@
-<h1>Check Out Item</h1>
+<h2>Check Out Item</h2>
 
 {{#if error}}
 <div class="alert-error">{{error}}</div>
 {{/if}}
 
-<form
-  action="/api/transactions/checkout"
-  method="POST"
-  enctype="multipart/form-data"
->
-  <div>
-    <label for="itemId">Item ID</label>
-    <input type="text" id="itemId" name="itemId" required />
-  </div>
-  <div>
-    <label for="notes">Notes</label>
-    <textarea id="notes" name="notes"></textarea>
-  </div>
-  <div>
-    <label for="document">Reference Document</label>
-    <input type="file" id="document" name="document" />
-  </div>
-  <button type="submit">Check Out</button>
-</form>
+<div class="panel" style="max-width: 600px;">
+  <form action="/api/transactions/checkout" method="POST" enctype="multipart/form-data" style="display: grid; gap: 16px;">
+    <div>
+      <label for="itemId">Select Item</label>
+      <select id="itemId" name="itemId" required>
+        <option value="" disabled selected>Select an available item...</option>
+        {{#each availableItems}}
+          <option value="{{this._id}}">{{this.brand}} {{this.model}} — {{this.serialNumber}}</option>
+        {{else}}
+          <option disabled>No available items</option>
+        {{/each}}
+      </select>
+    </div>
+    <div>
+      <label for="notes">Notes</label>
+      <textarea id="notes" name="notes" placeholder="Optional notes..."></textarea>
+    </div>
+    <div>
+      <label for="document">Reference Document</label>
+      <input type="file" id="document" name="document">
+    </div>
+    <button type="submit" class="btn btn-primary">Check Out</button>
+  </form>
+</div>
