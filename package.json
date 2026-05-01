@@ -1,7 +1,7 @@
 {
   "name": "computer-inventory-system",
   "version": "0.0.1",
-  "description": "Hi Professor,  I wanted to bring something to your attention regarding our INF 653 final project, due May 1.  I've raised the topic of starting with my group members several times over the past few weeks, but we haven't made any concrete progress — we don't even have a repository set up yet. I'm concerned that at this point (April 13), 18 days out,",
+  "description": "Web-based internal tool for IT departments to track computer hardware and peripherals.",
   "homepage": "https://github.com/tkimhong/computer-inventory-system#readme",
   "bugs": {
     "url": "https://github.com/tkimhong/computer-inventory-system/issues"
@@ -15,7 +15,7 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node seed.js && node app.js",
     "dev": "node --watch app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
